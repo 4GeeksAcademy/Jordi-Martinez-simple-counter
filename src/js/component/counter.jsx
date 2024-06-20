@@ -9,35 +9,38 @@ const styleOne = {
 };
 
 const Timer = () => {
-  const [seconds, setSeconds] = useState(0);
+  const [seconds, setSeconds] = useState(0);  
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setSeconds(seconds => seconds + 1);
+      if (!isPaused) {
+        setSeconds(seconds => seconds + 1);
+      }
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
-if (seconds < 10) {
-  return (
-    <div style={styleOne}>
-      <i class="far fa-clock"></i> 00000{seconds}
-    </div>
-  );
-} else if (seconds<100) {
-  return (
-    <div style={styleOne}>
-      <i class="far fa-clock"></i> 0000{seconds}
-    </div>
-  )
-}else {
-  return (
-    <div style={styleOne}>
-      <i class="far fa-clock"></i> 000{seconds}
-    </div>
-  )
-}
-  
+  }, [isPaused]);
+
+  const handlePauseResume = () => {
+    setIsPaused(prevPaused => !prevPaused);
+  };
+    return(
+    <div>
+      <p style={styleOne}>
+        <i className="far fa-clock"></i>
+        {(Math.floor(seconds/100000))%10}        
+        {(Math.floor(seconds/10000))%10}        
+        {(Math.floor(seconds/1000))%10}
+        {(Math.floor(seconds/100))%10}
+        {(Math.floor(seconds/10))%10}        
+        {(Math.floor(seconds))%10}
+      </p>
+      <button onClick={handlePauseResume} className='col-12'>
+        {isPaused ? 'Reanudar' : 'Pausar'}
+      </button>
+    </div> 
+    ) 
 };
 
 export default Timer;
